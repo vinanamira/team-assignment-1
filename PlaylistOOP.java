@@ -10,59 +10,145 @@ Tugas Kelompok 1
 Introduction to OOP & Data Structures
 */
 
+import java.util.Scanner;
+
 public class PlaylistOOP {
 
     public static void main(String[] args) {
-
-        // Array untuk menyimpan objek Lagu
         Lagu[] playlist = new Lagu[10];
+        Scanner scan = new Scanner(System.in);
 
-        // Membuat objek Admin dan Member
+        // Tambahkan 3 lagu default pada awal program
         Admin admin = new Admin("Andi");
-        Member member = new Member("Budi");
+        admin.tambahLagu(playlist, new Lagu("Hati-Hati di Jalan", "Tulus", 4.2));
+        admin.tambahLagu(playlist, new Lagu("Monokrom", "Tulus", 3.5));
+        admin.tambahLagu(playlist, new Lagu("Rumah Ke Rumah", "Hindia", 4.8));
 
-        /*
-         * Menampilkan hak akses masing-masing user
-         * (Polymorphism)
-         */
-        System.out.println("=== HAK AKSES ===");
-        admin.tampilkanAkses();
-        member.tampilkanAkses();
+        boolean keluarProgram = false;
+        while (!keluarProgram) {
+            System.out.println("\nPilih peran:\n1. Admin\n2. Member\n3. Keluar Program");
+            System.out.print("Masukkan pilihan (1/2/3): ");
+            String pilihan = scan.nextLine().trim();
 
-        /*
-         * Admin menambahkan lagu ke playlist
-         */
-        admin.tambahLagu(
-            playlist,
-            new Lagu("Hati-Hati di Jalan", "Tulus", 4.2),
-            0
-        );
+            switch (pilihan) {
+                case "1": {
+                    System.out.println("Login sebagai Admin: " + admin.getNama());
+                    admin.tampilkanAkses();
 
-        admin.tambahLagu(
-            playlist,
-            new Lagu("Monokrom", "Tulus", 3.5),
-            1
-        );
+                    boolean kembali = false;
+                    while (!kembali) {
+                        System.out.println("\n=== Menu Admin ===");
+                        System.out.println("1. Tambah lagu");
+                        System.out.println("2. Lihat daftar lagu");
+                        System.out.println("3. Kembali ke pemilihan user");
+                        System.out.print("Pilih: ");
+                        String opsi = scan.nextLine().trim();
 
-        admin.tambahLagu(
-            playlist,
-            new Lagu("Rumah Ke Rumah", "Hindia", 4.8),
-            2
-        );
+                        switch (opsi) {
+                            case "1":
+                                boolean adaSlot = false;
+                                for (Lagu l : playlist) {
+                                    if (l == null) { adaSlot = true; break; }
+                                }
+                                if (!adaSlot) {
+                                    System.out.println("Playlist penuh. Tidak bisa menambahkan lagu.");
+                                    break;
+                                }
 
-        /*
-         * Member melihat seluruh lagu
-         */
-        member.lihatDaftarLagu(playlist);
+                                String opsinxt = "y";
+                                while ("y".equalsIgnoreCase(opsinxt)) {
+                                    System.out.print("Judul: ");
+                                    String judul = scan.nextLine().trim();
+                                    System.out.print("Artis: ");
+                                    String artis = scan.nextLine().trim();
+                                    double durasi = 0;
+                                    try {
+                                        System.out.print("Durasi (menit): ");
+                                        durasi = Double.parseDouble(scan.nextLine().trim());
+                                    } catch (Exception e) {
+                                        System.out.println("Input durasi tidak valid. Batalkan penambahan.");
+                                        break;
+                                    }
 
-        /*
-         * Member mencari lagu berdasarkan judul
-         */
-        member.cariLagu(playlist, "Monokrom");
+                                    admin.tambahLagu(playlist, new Lagu(judul, artis, durasi));
 
-        /*
-         * Member menghitung rata-rata durasi lagu dalam playlist
-         */
-        member.hitungRataRataDurasi(playlist);
+                                    System.out.print("Tambah lagi? (y/n): ");
+                                    opsinxt = scan.nextLine().trim();
+
+                                    boolean masihKosong = false;
+                                    for (Lagu l : playlist) {
+                                        if (l == null) { masihKosong = true; break; }
+                                    }
+                                    if (!masihKosong) {
+                                        System.out.println("Playlist sekarang penuh.");
+                                        break;
+                                    }
+                                }
+                                break;
+
+                            case "2":
+                                admin.lihatDaftarLagu(playlist);
+                                break;
+
+                            case "3":
+                                kembali = true;
+                                break;
+
+                            default:
+                                System.out.println("Pilihan tidak dikenal.");
+                        }
+
+                    }
+                    break;
+                }
+
+                case "2": {
+                    Member member = new Member("Budi");
+                    System.out.println("Login sebagai Member: " + member.getNama());
+                    member.tampilkanAkses();
+
+                    boolean kembali = false;
+                    while (!kembali) {
+                        System.out.println("\n=== Menu Member ===");
+                        System.out.println("1. Lihat daftar lagu");
+                        System.out.println("2. Cari lagu berdasarkan judul");
+                        System.out.println("3. Hitung rata-rata durasi");
+                        System.out.println("4. Kembali ke pemilihan user");
+                        System.out.print("Pilih: ");
+                        String opsi = scan.nextLine().trim();
+
+                        switch (opsi) {
+                            case "1":
+                                member.lihatDaftarLagu(playlist);
+                                break;
+                            case "2":
+                                System.out.print("Masukkan judul lagu yang dicari: ");
+                                String judulCari = scan.nextLine().trim();
+                                member.cariLagu(playlist, judulCari);
+                                break;
+                            case "3":
+                                member.hitungRataRataDurasi(playlist);
+                                break;
+                            case "4":
+                                kembali = true;
+                                break;
+                            default:
+                                System.out.println("Pilihan tidak dikenal.");
+                        }
+                    }
+                    break;
+                }
+
+                case "3":
+                    keluarProgram = true;
+                    break;
+
+                default:
+                    System.out.println("Pilihan tidak dikenal. Coba lagi.");
+            }
+        }
+
+        scan.close();
+        System.out.println("Program selesai.");
     }
 }

@@ -11,12 +11,25 @@ public class Admin extends User {
     }
 
     // Menambahkan lagu ke array playlist
-    public void tambahLagu(Lagu[] playlist, Lagu lagu, int index) {
-        if (index >= 0 && index < playlist.length) {
-            playlist[index] = lagu;
-            System.out.println("Lagu berhasil ditambahkan.");
-        } else {
-            System.out.println("Posisi penyimpanan tidak valid.");
+    // Menambahkan lagu ke array playlist — otomatis pada posisi pertama kosong
+    public void tambahLagu(Lagu[] playlist, Lagu lagu) {
+        for (int i = 0; i < playlist.length; i++) {
+            if (playlist[i] == null) {
+                playlist[i] = lagu;
+                System.out.println("Lagu \"" + lagu.getJudul() + "\" berhasil ditambahkan pada posisi " + i + ".");
+                return;
+            }
+        }
+        System.out.println("Playlist penuh. Tidak dapat menambahkan lagu.");
+    }
+    // Menampilkan daftar lagu (Admin juga dapat melihat playlist)
+    public void lihatDaftarLagu(Lagu[] playlist) {
+        System.out.println("\n=== DAFTAR LAGU ===");
+        for (Lagu lagu : playlist) {
+            if (lagu != null) {
+                lagu.tampilkanInfo();
+                System.out.println("------------------");
+            }
         }
     }
 }
