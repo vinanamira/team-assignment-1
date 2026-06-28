@@ -32,4 +32,29 @@ public class Admin extends User {
             }
         }
     }
+
+    // Hapus lagu berdasarkan judul dan geser elemen agar rapi
+    public boolean hapusLagu(Lagu[] playlist, String judul) {
+        if (judul == null || judul.trim().isEmpty()) return false;
+        int foundIdx = -1;
+        for (int i = 0; i < playlist.length; i++) {
+            if (playlist[i] != null && playlist[i].getJudul().equalsIgnoreCase(judul.trim())) {
+                foundIdx = i;
+                break;
+            }
+        }
+        if (foundIdx == -1) {
+            System.out.println("Lagu dengan judul \"" + judul + "\" tidak ditemukan.");
+            return false;
+        }
+
+        // Geser left semua elemen setelah foundIdx
+        for (int i = foundIdx; i < playlist.length - 1; i++) {
+            playlist[i] = playlist[i + 1];
+        }
+        // Kosongkan slot terakhir
+        playlist[playlist.length - 1] = null;
+        System.out.println("Lagu \"" + judul + "\" berhasil dihapus.");
+        return true;
+    }
 }

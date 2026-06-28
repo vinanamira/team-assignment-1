@@ -38,14 +38,15 @@ public class PlaylistOOP {
                     boolean kembali = false;
                     while (!kembali) {
                         System.out.println("\n=== Menu Admin ===");
-                        System.out.println("1. Tambah lagu");
-                        System.out.println("2. Lihat daftar lagu");
-                        System.out.println("3. Kembali ke pemilihan user");
+                           System.out.println("1. Tambah lagu");
+                           System.out.println("2. Hapus lagu berdasarkan judul");
+                           System.out.println("3. Lihat daftar lagu");
+                           System.out.println("4. Kembali ke pemilihan user");
                         System.out.print("Pilih: ");
                         String opsi = scan.nextLine().trim();
 
                         switch (opsi) {
-                            case "1":
+                                case "1":
                                 boolean adaSlot = false;
                                 for (Lagu l : playlist) {
                                     if (l == null) { adaSlot = true; break; }
@@ -86,13 +87,19 @@ public class PlaylistOOP {
                                 }
                                 break;
 
-                            case "2":
-                                admin.lihatDaftarLagu(playlist);
-                                break;
+                                case "2":
+                                    System.out.print("Masukkan judul lagu yang ingin dihapus: ");
+                                    String judulHapus = scan.nextLine().trim();
+                                    admin.hapusLagu(playlist, judulHapus);
+                                    break;
 
-                            case "3":
-                                kembali = true;
-                                break;
+                                case "3":
+                                    admin.lihatDaftarLagu(playlist);
+                                    break;
+
+                                case "4":
+                                    kembali = true;
+                                    break;
 
                             default:
                                 System.out.println("Pilihan tidak dikenal.");
